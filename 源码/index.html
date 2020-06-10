@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跨域问题总结</title>
+</head>
+<body>
+    <!-- 
+        跨域： 产生原因浏览器的同源策略
+            同源策略： 协议域名端口号均相同才可以正常的进行数据间的交互
+            ajax： 会受到同源策略的限制
+            请求已经发出并且服务器端已经有接收到了，只不过在服务器返回响应的时候被浏览器给拦截了
+        1. 客户端和服务器端的跨域
+            1). JSONP    应用条件： 要求后台配合  返回的数据需要包裹
+            2). 服务器端代理  ngix  webpack devServer
+            3). CORS: cross origin resource sharing 跨域资源共享
+                1. 简单请求：
+                    1） 请求方式只能是get , post , head
+                    2） 请求头字段只能设置：    
+                            Access
+                            Access-Language
+                            Content-Type: 的值只能是 application/x-www-form-urlencoded
+                                                    mutipart/form-data   上传文件的编码格式
+                                                    text/plain
+                    Access-Control-Allow-Origin: ''
+                2. 非简单请求:
+                    不满足简单请求的请求则为非简单请求
+                    "Access-Control-Allow-Origin": "http://127.0.0.1:5500",  * 代表所有域
+                    "Access-Control-Allow-Methods": "PUT",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                应用条件： 需要后台（接口方）配合添加响应头信息
+
+        2. 客户端和客户端的跨域
+            iframe 父窗口获取子窗口的数据  可以用window.name
+                   子窗口获取父窗口的数据     location.hash
+            postMessage  h5中提出的
+                
+            localhost:5500/fieldList
+
+            用户有一个提交审核的操作按钮 当用户点击提交审核的按钮的时候 
+                    希望外层结构依然是我们这个项目的结构只不过里面内容变成了审核界面的内容（审核界面公司里面已经有另一个团队写好了并且已经上线check.didi.com）
+                    想要实现这个功能 我们可以使用iframe进行引入别人的审核界面  （还有一个功能是 当点击审核页面的返回按钮的时候 希望返回到之前提交审核之前的界面）
+                    
+                    实现这个功能就要由子窗口监听用户点击返回按钮的事件   监听到之后发给父窗口告知我们返回上一级
+            
+     -->
+     <!-- <script src="./jquery-3.3.1.js"></script> -->
+     <!-- <script>
+         function aa(res) {
+             console.log(res)
+         } 
+     </script> -->
+     <!-- <script src="http://localhost:3000/data?callback=aa"></script> -->
+
+     <iframe src="http://127.0.0.1:5501/index.html" frameborder="0" id="oIfr"></iframe>
+     <script>
+        //  $.ajax({
+        //      type: 'get',
+        //      url: 'http://localhost:3000/data',
+        //      success: function (res) {
+        //          console.log(res)
+        //      }
+        //  })
+            var oIfr = document.getElementById('oIfr');
+            // window.onmessage = function (e) {
+            //     console.log(e.data)
+            // }
+            // var obj = {
+            //     name:'我是爸爸'
+            // }
+            var crossOrigin = true;
+            oIfr.onload = function () {
+                if (crossOrigin) {
+                    oIfr.src = './demo.html'
+                    crossOrigin = false;
+                } else {
+                    console.log( oIfr.contentWindow.name)
+                }
+            }
+     </script>
+</body>
+</html>

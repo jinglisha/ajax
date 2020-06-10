@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>localhost:5000</title>
+</head> 
+<body>
+    localhost:5500 ----笔记
+    <!-- 
+        http://127.0.0.1:5500
+        http://localhost:80
+        1.  ajax   ===> 封装ajax函数  ajax 用来请求资源   可以使页面局部刷新
+            <from action="">
+        2. 网络的基础知识
+            (1). 五层网络模型： 物理层 ---》 数据链路层  ----》网络层---》 传输层---》 应用层   
+                duing   邓哥奇遇记     
+                七层网络模型：
+                        应用层:  网络服务与最终用户的一个接口。协议有：HTTP FTP TFTP SMTP SNMP DNS TELNET HTTPS POP3 DHCP
+                        表示层: 数据的表示、安全、压缩。（在五层模型里面已经合并到了应用层）格式有，JPEG、ASCll、DECOIC、加密格式等
+                        会话层: 建立、管理、终止会话。（在五层模型里面已经合并到了应用层） 对应主机进程，指本地主机与远程主机正在进行的会话
+            (2). 同源策略 
+                浏览器提出的安全机制  规定 协议域名端口号均相同的资源 可以相互之间通信 
+                    如果在不同源的位置去交互的话需要认证 
+                源： 协议+域名+端口号
+                https://www.baidu.com:443/
+                http://www.baidu.com:80/    
+            (3). 三次握手 和 四次挥手  发生在传输层
+                 三次握手： 为了确认双方可以正常的沟通   建立连接
+                 四次挥手： 为了确认双方都已经发送完信息了 并且都有回应了 双方都可以断开连接
+
+            (4). 请求方式： GET(获取数据的时候会用到)  POST（新建数据保存的时候用到）  HEAD  PUT（修改数据的时候会用到） DELETE（删除数据的时候会用到）
+               
+                    1.	GET	请求指定的页面信息，并返回实体主体。
+                    2	HEAD	类似于 GET 请求，只不过返回的响应中没有具体的内容，用于获取报头
+                    3	POST	向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST 请求可能会导致新的资源的建立和/或已有资源的修改。
+                    4	PUT	从客户端向服务器传送的数据取代指定的文档的内容。
+                    5	DELETE	请求服务器删除指定的页面。
+                    6	CONNECT	HTTP/1.1 协议中预留给能够将连接改为管道方式的代理服务器。
+                    7	OPTIONS	允许客户端查看服务器的性能。
+                    8	TRACE	回显服务器收到的请求，主要用于测试或诊断。
+                    9	PATCH	是对 PUT 方法的补充，用来对已知资源进行局部更新 。
+                    GET POST区别： 
+                    1. get请求把参数拼接在了地址上， post请求放在了请求体里
+                    2. get请求方式传递数据量较少， post请求传递数据量较大
+                    3. post相对于get而言较安全
+                      
+            (5). 状态码：
+                2xx  请求成功返回
+                3xx  重定向   301永久性重定向   302 临时性重定向   304 资源未修改  
+                4xx  客户端错误    404没有找到（检查地址）   403没有权限   400错误的请求（参数有错误） 
+                5xx  服务器端错误  500  服务器内部错误
+            (6). http 和 https的区别
+                https  是在http的基础上运用了ssl加密  运用的加密算法 rsa 默认端口号443 
+                http:  超文本传输协议 端口号80
+            (7). 
+                跨域：     
+                <1>  jsonp  ---》 不是w3c标准里的
+                    原理： script标签身上的src属性是不受同源策略的限制的
+                    src="http://www.baicu.com?"
+                <2>  服务器代理
+                <3>  iframe 
+                    iframe + window.name   ---》  父页面请求子页面的数据  儿子给父亲数据
+                    iframe + location.hash ----》  子页面请求父页面的数据  父亲给儿子数据
+                    iframe + window.postMessage  ---》  双向请求
+                <4>  CORS  ---》cross-origin resource sharing  跨域资源共享
+                        后端来设置一个响应头  access-control-allow-origin: 'http://www.duyiedu.com'
+                        浏览器先发出请求到服务器  返回的过程中 判断是否是同源的   
+                        如果不是同源的会去看响应报文的响应头是否有 access-control-allow-origin: * / 当前页面的域名
+                        w3c标准里面提出的
+
+
+                         浏览器将 CORS 请求分成两类：简单请求和非简单请求，只要同时满足下面两个条件就属于简单请求 
+                        ( 1 ) 请求的方法只能是 HEAD，GET，POST 
+                        ( 2 ) HTTP 的头信息不超出以下几种字段
+                            Accept
+                            Accept-Language
+                            Content-Language
+                            Last-Event-ID
+                            Content-Type：只限于三个值 application/x-www-form-urlencoded、multipart/form-data、text/plain
+                            只要不满足以上两个条件就属于非简单请求，浏览器对于非简单请求会进行一次预检
+
+                        对于简单请求 只需要设置 Allow-Control-Access-Origin相应头就可以
+                    非简单请求
+                        预检请求
+                        非简单请求指的是对服务器有特殊要求，比如请求方法为 PUT 或 DELETE，或者 Content-Type 字段的类型是 application/json。
+                        非简单请求的 CORS 请求会在通信之前，增减一次 HTTP 查询的请求，成为 “预检”。
+                        浏览器会先询问服务器，当前网页所在的域名是否在服务器许可的名单之中，
+                        以及可以使用哪些 HTTP 请求和头部字段。如果通过服务器的校验，才会发起正式的 XMLHttpRequest 请求，否则就报错
+
+
+                    非简单请求的响应头里面必须含有以下字段：
+
+                        Allow-Control-Access-Origin 必需，表示可以请求的源。
+                        Access-Control-Allow-Methods 必需，表示支持的所有方法，以逗号分隔
+                        Access-Control-Allow-Headers 如果浏览器请求包括 Access-Control-Req方法，以逗号分隔
+                        Access-Control-Allow-Headers 如果浏览器请求包括 Access-Control-Request-Headers 字段，则 Access-Control-Allow-Headers 字段是必需的。它也是一个逗号分隔的字符串，表明服务器支持的所有头信息字段。
+    
+                <5>  document.domain   ---》 基础域名相同的页面 可以跨域
+                   
+                HTTP请求的发出经历了什么    
+    
+                -->
+
+    
+</body>
+</html>
